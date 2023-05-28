@@ -1,0 +1,210 @@
+<div class="container">
+  <h1 class="title">Interview Meeting Room</h1>
+  <div>
+    <h2>Book a Meeting</h2>
+    <form #bookForm="ngForm" (ngSubmit)="onSubmit(bookForm)">
+      <div>
+        <label for="username">Username: <span class="imp-red">*</span> </label>
+        <input
+          type="text"
+          id="username"
+          [(ngModel)]="username"
+          #ngModel
+          name="user"
+          placeholder="Enter your Username"
+          [required]="true"
+        />
+      </div>
+      <div>
+        <label for="room">Room: <span class="imp-red">*</span></label>
+        <select
+          id="room"
+          [(ngModel)]="room"
+          #ngModel
+          name="rooms"
+          required="true"
+          placeholder="Select Room"
+        >
+          <option disabled selected value="null">Choosee Room..</option>
+          <option *ngFor="let room of rooms" [value]="room.name">
+            {{ room.name }}
+          </option>
+        </select>
+      </div>
+      <div>
+        <label for="date">Date: <span class="imp-red">*</span></label>
+        <input
+          type="date"
+          id="date"
+          [(ngModel)]="date"
+          #ngModel
+          name="dates"
+          [min]="currentDate"
+          placeholder="Select Date"
+          required="true"
+          (change)="restrictToMondayFriday($event)"
+        />
+      </div>
+      <div>
+        <label for="startTime"
+          >Start Time: <span class="imp-red">*</span></label
+        >
+        <input
+          type="time"
+          id="startTime"
+          [(ngModel)]="startTime"
+          #ngModel
+          name="starttimes"
+          required="true"
+          (change)="validateTime()"
+        />
+      </div>
+      <div>
+        <label for="endTime">End Time: <span class="imp-red">*</span></label>
+        <input
+          type="time"
+          id="endTime"
+          [(ngModel)]="endTime"
+          #ngModel
+          name="endtimes"
+          required="true"
+          (change)="validateTime()"
+        />
+      </div>
+      <div>
+        <label for="agenda">Agenda:</label>
+        <textarea
+          id="agenda"
+          [(ngModel)]="agenda"
+          #ngModel
+          name="Agenda"
+          placeholder="Enter Your Meeting Room Agenda"
+        ></textarea>
+      </div>
+      <button type="submit" [disabled]="!bookForm.valid">Book Meeting</button>
+    </form>
+  </div>
+
+  <div>
+    <h2>View Meetings</h2>
+    <div>
+      <label for="viewRoom">View Meetings for Room:</label>
+
+      <select
+        id="room"
+        [(ngModel)]="viewRoom"
+        (ngModelChange)="filterMeetingRooms()"
+        #ngModel
+        name="rooms"
+        required="true"
+        placeholder="Select Room"
+      >
+        <option disabled selected value="">Choosee Room..</option>
+        <option *ngFor="let room of rooms" [value]="room.name">
+          {{ room.name }}
+        </option>
+      </select>
+    </div>
+
+    <div
+      *ngIf="
+        filteredRoomStatuses[viewRoom] &&
+        filteredRoomStatuses[viewRoom].length > 0
+      "
+    >
+      <h3>Meetings for Room {{ viewRoom }}:</h3>
+      <table class="table-align">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Username</th>
+            <th>Agenda</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let meeting of filteredRoomStatuses[viewRoom]">
+            <td>{{ meeting.date }}</td>
+            <td>
+              {{ meeting.startTime | date }} - {{ meeting.endTime | date }}
+            </td>
+            <td>{{ meeting.username }}</td>
+            <td>{{ meeting.agenda ? meeting.agenda : " -" }}</td>
+            <td>
+              <button
+                (click)="
+                  deleteMeeting(meeting.room, meeting.date, meeting.startTime)
+                "
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div
+      *ngIf="
+        !filteredRoomStatuses[viewRoom] ||
+        filteredRoomStatuses[viewRoom].length === 0
+      "
+    >
+      <p class="no-meets">No meetings scheduled for {{ viewRoom }}</p>
+    </div>
+  </div>
+
+  <!-- <div>
+    <h2>View Meetings</h2>
+    <div>
+      <label>Room:</label>
+      <input type="text" [(ngModel)]="room" />
+    </div>
+    <button (click)="viewMeetings()">View Meetings</button>
+    <table *ngIf="roomStatuses.length !== 0">
+      <thead>
+        <tr>
+          <th>Meeting Room</th>
+          <th>Username</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Agenda</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let room of roomStatuses" style="text-align: center">
+          <td>{{ room.room }}</td>
+          <td>{{ room.username }}</td>
+          <td>{{ room.date }}</td>
+          <td>{{ room.startTime }} - {{ room.endTime }}</td>
+          <td>{{ room.agenda }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <p *ngIf="roomStatuses.length === 0">No meetings found.</p>
+  </div> -->
+
+  <div>
+    <h2>Current Status</h2>
+    <button (click)="getCurrentStatus()">Get Current Status</button>
+    <table *ngIf="roomStatuses.length !== 0" class="table-align">
+      <thead>
+        <tr>
+          <th>Meeting Room</th>
+          <th>Status</th>
+          <th>Username</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let room of roomStatuses">
+          <td>{{ room.room }}</td>
+          <td>{{ room.status }}</td>
+          <td>{{ room.username }}</td>
+          <td>{{ room.date }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
