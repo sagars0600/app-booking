@@ -79,16 +79,17 @@ export class BookingManagementComponent implements OnInit {
 
     this.startTime = new Date(`${this.currentDate}T${this.startTime}`);
     this.endTime = new Date(`${this.currentDate}T${this.endTime}`);
-    // if (this.startTime >= this.endTime) {
-    //   alert('The "Time To" should be later than "Time From".');
-    //   return;
-    // }
+    if (this.startTime >= this.endTime) {
+      alert('The Start Time should be later than End!.');
+      return;
+    }
 
     const bookingDuration = Math.abs(
       this.startTime.getTime() - this.endTime.getTime()
     );
-    const minDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
 
+    const minDuration = 30 * 60 * 1000;
+      //it check the end time is earlier than the start time
     if (bookingDuration < minDuration) {
       alert('The minimum booking duration should be 30 minutes.');
       return;
@@ -138,7 +139,6 @@ export class BookingManagementComponent implements OnInit {
       console.log(this.viewRoom);
     } else {
       this.filteredRoomStatuses = this.roomStatuses;
-      console.log(this.filteredRoomStatuses);
     }
   }
 
@@ -182,7 +182,7 @@ export class BookingManagementComponent implements OnInit {
     if (hour < 9 || hour > 18 || (hour === 18 && minute > 0)) {
       this.startTime = '';
       this.endTime = '';
-      alert('Please select a time between 9:00AM and 6:00PM.');
+      alert('Please select a time between 9:00AM to 6:00PM.');
     }
   }
 }

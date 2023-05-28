@@ -155,36 +155,6 @@
     </div>
   </div>
 
-  <!-- <div>
-    <h2>View Meetings</h2>
-    <div>
-      <label>Room:</label>
-      <input type="text" [(ngModel)]="room" />
-    </div>
-    <button (click)="viewMeetings()">View Meetings</button>
-    <table *ngIf="roomStatuses.length !== 0">
-      <thead>
-        <tr>
-          <th>Meeting Room</th>
-          <th>Username</th>
-          <th>Date</th>
-          <th>Time</th>
-          <th>Agenda</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let room of roomStatuses" style="text-align: center">
-          <td>{{ room.room }}</td>
-          <td>{{ room.username }}</td>
-          <td>{{ room.date }}</td>
-          <td>{{ room.startTime }} - {{ room.endTime }}</td>
-          <td>{{ room.agenda }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <p *ngIf="roomStatuses.length === 0">No meetings found.</p>
-  </div> -->
-
   <div>
     <h2>Current Status</h2>
     <button (click)="getCurrentStatus()">Get Current Status</button>
